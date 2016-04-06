@@ -51,6 +51,24 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.artifactId}", readonly = true, required = true)
     String appName;
 
+    @Parameter(defaultValue = "${project.version}", readonly = true, required = true)
+    String appVersion;
+
+    @Parameter(readonly = true, required = true)
+    String appVersionCode;
+
+    @Parameter(defaultValue = "${project.description}", readonly = true, required = true)
+    String appDescription;
+
+    @Parameter(defaultValue = "undefined", readonly = true, required = true)
+    String appAuthorEmail;
+
+    @Parameter(defaultValue = "${project.url}", readonly = true, required = true)
+    String appAuthorSite;
+
+    @Parameter(defaultValue = "${project.basedir}/config.xml", readonly = true, required = true)
+    File appConfig;
+
     @Parameter(readonly = true, required = true)
     List<String> platforms = Arrays.asList("browser");
 
@@ -71,4 +89,16 @@ public abstract class Web2AppMojo extends AbstractMojo {
 
     @Component
     protected BuildPluginManager pluginManager;
+
+    protected File getPlatformsDir() {
+        return new File(appDirectory, "platforms");
+    }
+
+    protected File getPlatformDir(String name) {
+        return new File(getPlatformsDir(), name);
+    }
+
+    protected File getWwwDir() {
+        return new File(appDirectory, "www");
+    }
 }

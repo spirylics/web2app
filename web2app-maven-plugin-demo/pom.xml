@@ -48,6 +48,7 @@
                         <version>1.2.1</version>
                         <type>war</type>
                     </dependency>
+                    <appVersionCode>1</appVersionCode>
                 </configuration>
             </plugin>
         </plugins>

@@ -30,37 +30,9 @@ public class CreateProject extends Web2AppMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-            Files.createDirectories(buildDirectory.toPath());
-            if (buildDirectory.list().length == 0) {
-                execCordova("create cordova project", buildDirectory, "create", appDirectory.getAbsolutePath(), appGroup, appName);
-                FileUtils.deleteDirectory(getWwwDir());
-                Files.createDirectories(getWwwDir().toPath());
-            } else {
-                getLog().info("cordova project already created");
-            }
-            for (String platform : platforms) {
-                File platformDir = getPlatformDir(platform);
-                if (platformDir.exists()) {
-                    getLog().info(platform + " platform already exists");
-                } else {
-                    execCordova("add " + platform + " platform", appDirectory, "platforms", "add", platform);
-                    Files.walkFileTree(platformDir.toPath(), new SimpleFileVisitor<Path>() {
-                        @Override
-                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                                throws IOException {
-                            String filename = file.toFile().getName();
-                            if (filename.endsWith(".png") && !filename.matches(".*ic_.*.png")) {
-                                Files.deleteIfExists(file);
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-                }
-            }
-            for (String plugin : plugins) {
-                execCordova("add " + plugin + " plugin", appDirectory, "plugin", "add", plugin);
-            }
+            setup();
             importWebApp();
+            importConfig();
         } catch (Exception e) {
             if (e instanceof MojoExecutionException) {
                 throw (MojoExecutionException) e;
@@ -86,6 +58,39 @@ public class CreateProject extends Web2AppMojo {
                     this,
                     CharStreams.toString(new InputStreamReader(p.getErrorStream())),
                     info);
+        }
+    }
+
+    void setup() throws Exception {
+        Files.createDirectories(buildDirectory.toPath());
+        if (buildDirectory.list().length == 0) {
+            execCordova("create cordova project", buildDirectory, "create", appDirectory.getAbsolutePath(), appGroup, appName);
+            FileUtils.deleteDirectory(getWwwDir());
+            Files.createDirectories(getWwwDir().toPath());
+        } else {
+            getLog().info("cordova project already created");
+        }
+        for (String platform : platforms) {
+            File platformDir = getPlatformDir(platform);
+            if (platformDir.exists()) {
+                getLog().info(platform + " platform already exists");
+            } else {
+                execCordova("add " + platform + " platform", appDirectory, "platforms", "add", platform);
+                Files.walkFileTree(platformDir.toPath(), new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                            throws IOException {
+                        String filename = file.toFile().getName();
+                        if (filename.endsWith(".png") && !filename.matches(".*ic_.*.png")) {
+                            Files.deleteIfExists(file);
+                        }
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+            }
+        }
+        for (String plugin : plugins) {
+            execCordova("add " + plugin + " plugin", appDirectory, "plugin", "add", plugin);
         }
     }
 
@@ -117,16 +122,26 @@ public class CreateProject extends Web2AppMojo {
         );
     }
 
-    File getPlatformsDir() {
-        return new File(appDirectory, "platforms");
-    }
-
-    File getPlatformDir(String name) {
-        return new File(getPlatformsDir(), name);
-    }
-
-    File getWwwDir() {
-        return new File(appDirectory, "www");
+    void importConfig() throws MojoExecutionException {
+        executeMojo(
+                plugin(groupId("org.apache.maven.plugins"), artifactId("maven-resources-plugin"), version("2.7")),
+                goal("copy-resources"),
+                configuration(
+                        element(name("outputDirectory"), appDirectory.getAbsolutePath()),
+                        element(name("overwrite"), "true"),
+                        element(name("resources"),
+                                element("resource",
+                                        element(name("directory"), appConfig.getParentFile().getAbsolutePath()),
+                                        element(name("filtering"), "true"),
+                                        element(name("includes"), element(name("include"), appConfig.getName()))
+                                ))
+                ),
+                executionEnvironment(
+                        mavenProject,
+                        mavenSession,
+                        pluginManager
+                )
+        );
     }
 
 }
