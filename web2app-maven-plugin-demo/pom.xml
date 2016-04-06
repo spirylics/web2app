@@ -43,9 +43,9 @@
                         <plugin>cordova-plugin-network-information</plugin>
                     </plugins>
                     <dependency>
-                        <groupId>com.asayama.docs.gwt.angular</groupId>
-                        <artifactId>gwt-angular-web</artifactId>
-                        <version>1.0.3</version>
+                        <groupId>com.gwtplatform</groupId>
+                        <artifactId>gwtp-carstore</artifactId>
+                        <version>1.2.1</version>
                         <type>war</type>
                     </dependency>
                 </configuration>

@@ -104,7 +104,9 @@ public class CreateProject extends Web2AppMojo {
                                         element(name("version"), dependency.getVersion()),
                                         element(name("type"), dependency.getType()),
                                         element(name("overWrite"), "true"),
-                                        element(name("outputDirectory"), getWwwDir().getAbsolutePath())
+                                        element(name("outputDirectory"), getWwwDir().getAbsolutePath()),
+                                        element(name("includes"), dependencyIncludes),
+                                        element(name("excludes"), dependencyExcludes)
                                 ))
                 ),
                 executionEnvironment(

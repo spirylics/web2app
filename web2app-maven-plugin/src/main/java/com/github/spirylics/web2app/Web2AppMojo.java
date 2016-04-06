@@ -39,6 +39,12 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(readonly = true, required = true)
     Dependency dependency;
 
+    @Parameter(defaultValue = "**", readonly = true, required = true)
+    String dependencyIncludes;
+
+    @Parameter(defaultValue = "META-INF/,WEB-INF/", readonly = true, required = true)
+    String dependencyExcludes;
+
     @Parameter(defaultValue = "${project.groupId}", readonly = true, required = true)
     String appGroup;
 
