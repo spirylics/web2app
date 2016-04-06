@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>web2app</artifactId>
+        <groupId>com.github.spirylics.web2app</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>web2app-maven-plugin-demo</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.spirylics.web2app</groupId>
+                <artifactId>web2app-maven-plugin</artifactId>
+                <version>${project.parent.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>install-cordova</goal>
+                            <goal>create-project</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <platforms>
+                        <platform>browser</platform>
+                        <platform>android</platform>
+                    </platforms>
+                    <plugins>
+                        <plugin>https://github.com/robertklein/cordova-ios-security.git</plugin>
+                        <plugin>cordova-plugin-device</plugin>
+                        <plugin>cordova-plugin-splashscreen</plugin>
+                        <plugin>cordova-plugin-statusbar</plugin>
+                        <plugin>ionic-plugin-keyboard</plugin>
+                        <plugin>cordova-plugin-inappbrowser</plugin>
+                        <plugin>cordova-plugin-crosswalk-webview</plugin>
+                        <plugin>cordova-plugin-geolocation</plugin>
+                        <plugin>cordova-plugin-networkactivityindicator</plugin>
+                        <plugin>cordova-plugin-network-information</plugin>
+                    </plugins>
+                    <dependency>
+                        <groupId>com.asayama.docs.gwt.angular</groupId>
+                        <artifactId>gwt-angular-web</artifactId>
+                        <version>1.0.3</version>
+                        <type>war</type>
+                    </dependency>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

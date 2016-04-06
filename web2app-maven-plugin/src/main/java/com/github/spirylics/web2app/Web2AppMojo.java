@@ -57,7 +57,10 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject mavenProject;
 
-    @Component
+    /**
+     * Maven session
+     */
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession mavenSession;
 
     @Component
