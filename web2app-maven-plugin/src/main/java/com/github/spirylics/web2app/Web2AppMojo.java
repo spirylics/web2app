@@ -1,6 +1,7 @@
 package com.github.spirylics.web2app;
 
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
@@ -10,6 +11,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,6 +72,9 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.basedir}/config.xml", readonly = true, required = true)
     File appConfig;
 
+    @Parameter(defaultValue = "index.html", readonly = true, required = true)
+    String appContent;
+
     @Parameter(readonly = true, required = true)
     List<String> platforms = Arrays.asList("browser");
 
@@ -100,5 +106,19 @@ public abstract class Web2AppMojo extends AbstractMojo {
 
     protected File getWwwDir() {
         return new File(appDirectory, "www");
+    }
+
+    protected File getContentFile() {
+        return new File(getWwwDir(), appContent);
+    }
+
+    protected void appendScript(File htmlFile, String scriptSrc) throws IOException {
+        String content = FileUtils.readFileToString(htmlFile);
+        if (!content.contains(scriptSrc)) {
+            content.replaceFirst(
+                    "</head>",
+                    String.format("\t<script type=\"text/javascript\" src=\"%s\"></script>\n</head>", scriptSrc));
+            Files.write(htmlFile.toPath(), content.getBytes());
+        }
     }
 }

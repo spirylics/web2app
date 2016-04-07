@@ -33,6 +33,7 @@ public class CreateProject extends Web2AppMojo {
             setup();
             importWebApp();
             importConfig();
+            injectCordovaJs();
         } catch (Exception e) {
             if (e instanceof MojoExecutionException) {
                 throw (MojoExecutionException) e;
@@ -123,6 +124,14 @@ public class CreateProject extends Web2AppMojo {
     }
 
     void importConfig() throws MojoExecutionException {
+        mavenProject.getProperties().put("appGroup", appGroup);
+        mavenProject.getProperties().put("appName", appName);
+        mavenProject.getProperties().put("appVersion", appVersion);
+        mavenProject.getProperties().put("appVersionCode", appVersionCode);
+        mavenProject.getProperties().put("appDescription", appDescription);
+        mavenProject.getProperties().put("appAuthorEmail", appAuthorEmail);
+        mavenProject.getProperties().put("appAuthorSite", appAuthorSite);
+        mavenProject.getProperties().put("appContent", appContent);
         executeMojo(
                 plugin(groupId("org.apache.maven.plugins"), artifactId("maven-resources-plugin"), version("2.7")),
                 goal("copy-resources"),
@@ -142,6 +151,10 @@ public class CreateProject extends Web2AppMojo {
                         pluginManager
                 )
         );
+    }
+
+    void injectCordovaJs() throws IOException {
+        appendScript(getContentFile(), "cordova.js");
     }
 
 }

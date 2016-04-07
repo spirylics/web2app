@@ -49,6 +49,7 @@
                         <type>war</type>
                     </dependency>
                     <appVersionCode>1</appVersionCode>
+                    <appContent>CarStore.html</appContent>
                 </configuration>
             </plugin>
         </plugins>

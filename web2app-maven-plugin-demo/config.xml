@@ -6,7 +6,7 @@
         xmlns="http://www.w3.org/ns/widgets">
     <name>${appName}</name>
     <description>${appDescription}</description>
-    <author email="${appAuthorMail}" href="${appAuthorSite}">
+    <author email="${appAuthorEmail}" href="${appAuthorSite}">
         App Team
     </author>
     <content src="${appContent}"/>
