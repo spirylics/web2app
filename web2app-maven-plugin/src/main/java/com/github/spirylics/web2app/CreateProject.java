@@ -35,6 +35,7 @@ public class CreateProject extends Web2AppMojo {
             importWebApp();
             importConfig();
             injectCordovaJs();
+            importImages();
         } catch (Exception e) {
             if (e instanceof MojoExecutionException) {
                 throw (MojoExecutionException) e;
@@ -151,26 +152,14 @@ public class CreateProject extends Web2AppMojo {
     }
 
     void importImages() throws MojoExecutionException {
-
-       Xpp3Dom configuration = configuration(
-                element(name("outputDirectory"), appDirectory.getAbsolutePath()),
-                element(name("overwrite"), "true"),
-                element(name("resources"),
-                        element("resource",
-                                element(name("directory"), appConfig.getParentFile().getAbsolutePath()),
-                                element(name("filtering"), "true"),
-                                element(name("includes"), element(name("include"), appConfig.getName()))
-                        ))
-        );
+        Xpp3Dom configuration = configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), "0x0091D4", platforms)
+                .addImage(getWwwDir().getAbsolutePath() + "/icons/ic_launcher.png")
+                .build());
         executeMojo(
                 plugin("com.filmon.maven", "image-maven-plugin", "1.2.1"),
                 "scale",
                 configuration,
-                executionEnvironment(
-                        mavenProject,
-                        mavenSession,
-                        pluginManager
-                )
+                executionEnvironment(mavenProject, mavenSession, pluginManager)
         );
     }
 
