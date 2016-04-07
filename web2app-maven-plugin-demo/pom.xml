@@ -11,6 +11,18 @@
 
     <artifactId>web2app-maven-plugin-demo</artifactId>
 
+    <properties>
+        <app.group>${project.groupId}</app.group>
+        <app.name>${project.artifactId}</app.name>
+        <app.id>${app.group}.${app.name}</app.id>
+        <app.version>${project.version}</app.version>
+        <app.version.code>1</app.version.code>
+        <app.description>${project.description}</app.description>
+        <app.author.email>web2app@nope.mail</app.author.email>
+        <app.author.site>${project.url}</app.author.site>
+        <app.content>CarStore.html</app.content>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

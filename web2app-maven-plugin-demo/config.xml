@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="${appGroup}"
-        version="${appVersion}"
-        android-versionCode="${appVersionCode}"
-        ios-CFBundleVersion="${appVersionCode}"
+<widget id="${app.id}"
+        version="${app.version}"
+        android-versionCode="${app.version.code}"
+        ios-CFBundleVersion="${app.version.code}"
         xmlns="http://www.w3.org/ns/widgets">
-    <name>${appName}</name>
-    <description>${appDescription}</description>
-    <author email="${appAuthorEmail}" href="${appAuthorSite}">
+    <name>${app.name}</name>
+    <description>${app.description}</description>
+    <author email="${app.author.email}" href="${app.author.site}">
         App Team
     </author>
-    <content src="${appContent}"/>
+    <content src="${app.content}"/>
     <plugin name="cordova-plugin-whitelist"/>
     <access origin="*"/>
     <allow-intent href="http://*/*"/>

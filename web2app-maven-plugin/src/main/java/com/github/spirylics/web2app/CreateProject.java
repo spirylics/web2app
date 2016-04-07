@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,14 +125,6 @@ public class CreateProject extends Web2AppMojo {
     }
 
     void importConfig() throws MojoExecutionException {
-        mavenProject.getProperties().put("appGroup", appGroup);
-        mavenProject.getProperties().put("appName", appName);
-        mavenProject.getProperties().put("appVersion", appVersion);
-        mavenProject.getProperties().put("appVersionCode", appVersionCode);
-        mavenProject.getProperties().put("appDescription", appDescription);
-        mavenProject.getProperties().put("appAuthorEmail", appAuthorEmail);
-        mavenProject.getProperties().put("appAuthorSite", appAuthorSite);
-        mavenProject.getProperties().put("appContent", appContent);
         executeMojo(
                 plugin(groupId("org.apache.maven.plugins"), artifactId("maven-resources-plugin"), version("2.7")),
                 goal("copy-resources"),
@@ -155,6 +148,30 @@ public class CreateProject extends Web2AppMojo {
 
     void injectCordovaJs() throws IOException {
         appendScript(getContentFile(), "cordova.js");
+    }
+
+    void importImages() throws MojoExecutionException {
+
+       Xpp3Dom configuration = configuration(
+                element(name("outputDirectory"), appDirectory.getAbsolutePath()),
+                element(name("overwrite"), "true"),
+                element(name("resources"),
+                        element("resource",
+                                element(name("directory"), appConfig.getParentFile().getAbsolutePath()),
+                                element(name("filtering"), "true"),
+                                element(name("includes"), element(name("include"), appConfig.getName()))
+                        ))
+        );
+        executeMojo(
+                plugin("com.filmon.maven", "image-maven-plugin", "1.2.1"),
+                "scale",
+                configuration,
+                executionEnvironment(
+                        mavenProject,
+                        mavenSession,
+                        pluginManager
+                )
+        );
     }
 
 }

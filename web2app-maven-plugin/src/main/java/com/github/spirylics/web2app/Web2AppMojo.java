@@ -48,25 +48,25 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "META-INF/,WEB-INF/", readonly = true, required = true)
     String dependencyExcludes;
 
-    @Parameter(defaultValue = "${project.groupId}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.group}", readonly = true, required = true)
     String appGroup;
 
-    @Parameter(defaultValue = "${project.artifactId}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.name}", readonly = true, required = true)
     String appName;
 
-    @Parameter(defaultValue = "${project.version}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.version}", readonly = true, required = true)
     String appVersion;
 
-    @Parameter(readonly = true, required = true)
+    @Parameter(defaultValue = "${app.version.code}", readonly = true, required = true)
     String appVersionCode;
 
-    @Parameter(defaultValue = "${project.description}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.description}", readonly = true, required = true)
     String appDescription;
 
-    @Parameter(defaultValue = "undefined", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.author.email}", readonly = true, required = true)
     String appAuthorEmail;
 
-    @Parameter(defaultValue = "${project.url}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.author.site}", readonly = true, required = true)
     String appAuthorSite;
 
     @Parameter(defaultValue = "${project.basedir}/config.xml", readonly = true, required = true)
