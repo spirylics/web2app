@@ -152,12 +152,19 @@ public class CreateProject extends Web2AppMojo {
     }
 
     void importImages() throws MojoExecutionException {
-        Xpp3Dom configuration = configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), "0x0091D4", platforms)
-                .addImage(getWwwDir().getAbsolutePath() + "/icons/ic_launcher.png")
+        Xpp3Dom configuration = configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), getWwwDir().getAbsolutePath(), themeColor, platforms)
+                .addIcon(icon)
+                .addSplashscreen(splashscreen)
                 .build());
         executeMojo(
                 plugin("com.filmon.maven", "image-maven-plugin", "1.2.1"),
                 "scale",
+                configuration,
+                executionEnvironment(mavenProject, mavenSession, pluginManager)
+        );
+        executeMojo(
+                plugin("com.filmon.maven", "image-maven-plugin", "1.2.1"),
+                "crop",
                 configuration,
                 executionEnvironment(mavenProject, mavenSession, pluginManager)
         );

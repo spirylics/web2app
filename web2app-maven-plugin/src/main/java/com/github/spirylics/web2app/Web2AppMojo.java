@@ -81,6 +81,15 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(readonly = true, required = true)
     List<String> plugins = Arrays.asList();
 
+    @Parameter(defaultValue = "", readonly = true, required = true)
+    String icon;
+
+    @Parameter(defaultValue = "", readonly = true, required = true)
+    String splashscreen;
+
+    @Parameter(defaultValue = "0xFFFFFF", readonly = true, required = true)
+    String themeColor;
+
     /**
      * Maven project
      */
