@@ -29,15 +29,13 @@ public class Create extends Web2AppMojo {
         importWebApp();
         importConfig();
         injectCordovaJs();
-        importImages();
+//        importImages();
     }
 
     void init() throws Exception {
         Files.createDirectories(buildDirectory.toPath());
         if (buildDirectory.list().length == 0) {
             execCordova("create cordova project", buildDirectory, "create", appDirectory.getAbsolutePath(), appGroup, appName);
-            FileUtils.deleteDirectory(getWwwDir());
-            Files.createDirectories(getWwwDir().toPath());
         } else {
             getLog().info("cordova project already created");
         }
@@ -47,17 +45,6 @@ public class Create extends Web2AppMojo {
                 getLog().info(platform + " platform already exists");
             } else {
                 execCordova("add " + platform + " platform", appDirectory, "platforms", "add", platform);
-                Files.walkFileTree(platformDir.toPath(), new SimpleFileVisitor<Path>() {
-                    @Override
-                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                            throws IOException {
-                        String filename = file.toFile().getName();
-                        if (filename.endsWith(".png") && !filename.matches(".*ic_.*.png")) {
-                            Files.deleteIfExists(file);
-                        }
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
             }
         }
         for (String plugin : plugins) {
@@ -65,7 +52,9 @@ public class Create extends Web2AppMojo {
         }
     }
 
-    void importWebApp() throws MojoExecutionException {
+    void importWebApp() throws Exception {
+        FileUtils.deleteDirectory(getWwwDir());
+        Files.createDirectories(getWwwDir().toPath());
         executeMojo(
                 plugin("org.apache.maven.plugins", "maven-dependency-plugin", "2.10"),
                 goal("unpack"),
@@ -119,7 +108,18 @@ public class Create extends Web2AppMojo {
         appendScript(getContentFile(), "cordova.js");
     }
 
-    void importImages() throws MojoExecutionException {
+    void importImages() throws Exception {
+        Files.walkFileTree(getPlatformsDir().toPath(), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                String filename = file.toFile().getName();
+                if (filename.endsWith(".png") && !filename.matches(".*ic_.*.png")) {
+                    Files.deleteIfExists(file);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
         Xpp3Dom configuration = configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), getWwwDir().getAbsolutePath(), themeColor, platforms)
                 .addIcon(icon)
                 .addSplashscreen(splashscreen)

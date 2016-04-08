@@ -22,7 +22,7 @@ public class Setup extends Web2AppMojo {
     @Override
     public void e() throws Exception {
         try {
-            mavenProject.getProperties().put("cordova.version", "~6.0.0");
+            mavenProject.getProperties().put("cordova.version", "~6.1.1");
             InputStream templatePackageStream = getClass().getResourceAsStream("package.json");
             Path tempPath = Files.createTempDirectory("web2app-maven-plugin");
             File tempFile = tempPath.toFile();
@@ -54,8 +54,8 @@ public class Setup extends Web2AppMojo {
                     frontendPlugin,
                     goal("install-node-and-npm"),
                     configuration(
-                            element(name("nodeVersion"), "v5.5.0"),
-                            element(name("npmVersion"), "3.6.0"),
+                            element(name("nodeVersion"), "v5.10.1"),
+                            element(name("npmVersion"), "3.8.3"),
                             element(name("installDirectory"), frontendDirectory.getAbsolutePath())
                     ),
                     executionEnvironment(

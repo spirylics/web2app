@@ -74,7 +74,7 @@ public class ImagesGenBuilder {
             .put("mdpi", Fraction.getFraction(4, 16))
             .put("hdpi", Fraction.getFraction(6, 16))
             .put("xhdpi", Fraction.getFraction(8, 16))
-            .put("xxdpi", Fraction.getFraction(12, 16))
+            .put("xxhdpi", Fraction.getFraction(12, 16))
             .put("xxxdpi", Fraction.getFraction(16, 16))
             .build();
     final Map<String, Size> androidDensitySplashPortraitMap = new ImmutableMap.Builder<String, Size>()
@@ -82,7 +82,7 @@ public class ImagesGenBuilder {
             .put("mdpi", new Size(320, 480))
             .put("hdpi", new Size(480, 800))
             .put("xhdpi", new Size(720, 1280))
-            .put("xxdpi", new Size(960, 1600))
+            .put("xxhdpi", new Size(960, 1600))
             .put("xxxdpi", new Size(1280, 1920))
             .build();
     final Map<String, Size> androidDensitySplashLandscapeMap = androidDensitySplashPortraitMap.entrySet().stream()
