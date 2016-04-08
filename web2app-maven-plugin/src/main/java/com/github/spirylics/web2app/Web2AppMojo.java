@@ -1,9 +1,8 @@
 package com.github.spirylics.web2app;
 
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.io.CharStreams;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
@@ -16,7 +15,6 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -137,21 +135,15 @@ public abstract class Web2AppMojo extends AbstractMojo {
     }
 
     void execCordova(String action, File dir, String... args) throws Exception {
-        List<String> argList = Lists.newArrayList(cordovaExec.getAbsolutePath());
-        argList.addAll(Arrays.asList(args));
-        ProcessBuilder pb = new ProcessBuilder(Iterables.toArray(argList, String.class));
-        pb.directory(dir);
-        Process p = pb.start();
-        int result = p.waitFor();
-        String info = CharStreams.toString(new InputStreamReader(p.getInputStream()));
-        if (result == 0) {
-            getLog().info(info);
+        CommandLine commandLine = new CommandLine(cordovaExec);
+        commandLine.addArguments(args);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(dir);
+        int exitValue = executor.execute(commandLine);
+        if (exitValue == 0) {
             getLog().info(action + ": OK");
         } else {
-            throw new MojoExecutionException(
-                    this,
-                    CharStreams.toString(new InputStreamReader(p.getErrorStream())),
-                    info);
+            throw new MojoExecutionException(action + ": FAILED");
         }
     }
 

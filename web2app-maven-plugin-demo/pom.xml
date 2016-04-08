@@ -42,6 +42,7 @@
                     <platforms>
                         <platform>browser</platform>
                         <platform>android</platform>
+                        <platform>ios</platform>
                     </platforms>
                     <plugins>
                         <plugin>https://github.com/robertklein/cordova-ios-security.git</plugin>

@@ -29,7 +29,7 @@ public class Create extends Web2AppMojo {
         importWebApp();
         importConfig();
         injectCordovaJs();
-//        importImages();
+        importImages();
     }
 
     void init() throws Exception {
