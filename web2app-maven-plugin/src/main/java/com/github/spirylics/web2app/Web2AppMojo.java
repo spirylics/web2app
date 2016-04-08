@@ -1,17 +1,22 @@
 package com.github.spirylics.web2app;
 
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.io.CharStreams;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -130,4 +135,38 @@ public abstract class Web2AppMojo extends AbstractMojo {
             Files.write(htmlFile.toPath(), content.getBytes());
         }
     }
+
+    void execCordova(String action, File dir, String... args) throws Exception {
+        List<String> argList = Lists.newArrayList(cordovaExec.getAbsolutePath());
+        argList.addAll(Arrays.asList(args));
+        ProcessBuilder pb = new ProcessBuilder(Iterables.toArray(argList, String.class));
+        pb.directory(dir);
+        Process p = pb.start();
+        int result = p.waitFor();
+        String info = CharStreams.toString(new InputStreamReader(p.getInputStream()));
+        if (result == 0) {
+            getLog().info(info);
+            getLog().info(action + ": OK");
+        } else {
+            throw new MojoExecutionException(
+                    this,
+                    CharStreams.toString(new InputStreamReader(p.getErrorStream())),
+                    info);
+        }
+    }
+
+    @Override
+    public void execute() throws MojoExecutionException {
+        try {
+            e();
+        } catch (Exception e) {
+            if (e instanceof MojoExecutionException) {
+                throw (MojoExecutionException) e;
+            } else {
+                throw new MojoExecutionException(getClass().getSimpleName() + " FAILED", e);
+            }
+        }
+    }
+
+    protected abstract void e() throws Exception;
 }

@@ -32,8 +32,9 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>install-cordova</goal>
-                            <goal>create-project</goal>
+                            <goal>setup</goal>
+                            <goal>create</goal>
+                            <goal>build</goal>
                         </goals>
                     </execution>
                 </executions>

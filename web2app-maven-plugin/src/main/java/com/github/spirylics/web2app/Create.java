@@ -1,8 +1,5 @@
 package com.github.spirylics.web2app;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.io.CharStreams;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -11,14 +8,11 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.apache.maven.plugins.annotations.LifecyclePhase.GENERATE_SOURCES;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
@@ -26,45 +20,19 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 /**
  * Create cordova project
  */
-@Mojo(name = "create-project", defaultPhase = GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
-public class CreateProject extends Web2AppMojo {
+@Mojo(name = "create", defaultPhase = GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
+public class Create extends Web2AppMojo {
 
-    public void execute() throws MojoExecutionException {
-        try {
-            setup();
-            importWebApp();
-            importConfig();
-            injectCordovaJs();
-            importImages();
-        } catch (Exception e) {
-            if (e instanceof MojoExecutionException) {
-                throw (MojoExecutionException) e;
-            } else {
-                throw new MojoExecutionException("create cordova project FAILED", e);
-            }
-        }
+    @Override
+    public void e() throws Exception {
+        init();
+        importWebApp();
+        importConfig();
+        injectCordovaJs();
+        importImages();
     }
 
-    void execCordova(String action, File dir, String... args) throws Exception {
-        List<String> argList = Lists.newArrayList(cordovaExec.getAbsolutePath());
-        argList.addAll(Arrays.asList(args));
-        ProcessBuilder pb = new ProcessBuilder(Iterables.toArray(argList, String.class));
-        pb.directory(dir);
-        Process p = pb.start();
-        int result = p.waitFor();
-        String info = CharStreams.toString(new InputStreamReader(p.getInputStream()));
-        if (result == 0) {
-            getLog().info(info);
-            getLog().info(action + ": OK");
-        } else {
-            throw new MojoExecutionException(
-                    this,
-                    CharStreams.toString(new InputStreamReader(p.getErrorStream())),
-                    info);
-        }
-    }
-
-    void setup() throws Exception {
+    void init() throws Exception {
         Files.createDirectories(buildDirectory.toPath());
         if (buildDirectory.list().length == 0) {
             execCordova("create cordova project", buildDirectory, "create", appDirectory.getAbsolutePath(), appGroup, appName);

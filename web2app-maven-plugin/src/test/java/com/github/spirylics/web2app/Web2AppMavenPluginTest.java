@@ -39,7 +39,7 @@ public class Web2AppMavenPluginTest {
 
     @Test
     public void testBuild() throws Exception {
-        getMojo("install-cordova").execute();
+        getMojo("setup").execute();
     }
 
 }
