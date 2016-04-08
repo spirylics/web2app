@@ -87,8 +87,8 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "", readonly = true, required = true)
     String splashscreen;
 
-    @Parameter(defaultValue = "0xFFFFFF", readonly = true, required = true)
-    String themeColor;
+    @Parameter(readonly = true, required = false)
+    String themeColor = null;
 
     /**
      * Maven project

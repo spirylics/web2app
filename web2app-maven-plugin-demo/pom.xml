@@ -63,7 +63,7 @@
                     <appVersionCode>1</appVersionCode>
                     <appContent>CarStore.html</appContent>
                     <icon>icons/ic_launcher.png</icon>
-                    <splashscreen>${project.basedir}/screen.png</splashscreen>
+                    <splashscreen>${project.basedir}/splashscreen.png</splashscreen>
                     <themeColor>0xF8F8F8</themeColor>
                 </configuration>
             </plugin>
