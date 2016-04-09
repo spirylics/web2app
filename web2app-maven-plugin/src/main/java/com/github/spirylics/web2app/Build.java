@@ -9,7 +9,7 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
  * Create cordova project
  */
 @Mojo(name = "build", defaultPhase = COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE)
-public class BuildProject extends Web2AppMojo {
+public class Build extends Web2AppMojo {
 
     @Override
     public void e() throws Exception {

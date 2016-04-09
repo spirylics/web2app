@@ -1,13 +1,12 @@
 package com.github.spirylics.web2app;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.apache.maven.plugins.annotations.LifecyclePhase.INITIALIZE;
@@ -22,15 +21,12 @@ public class Setup extends Web2AppMojo {
     @Override
     public void e() throws Exception {
         try {
+            if (BooleanUtils.isTrue(clear)) {
+                FileUtils.deleteDirectory(frontendDirectory);
+                FileUtils.deleteDirectory(frontendWorkingDirectory);
+            }
             mavenProject.getProperties().put("cordova.version", "~6.1.1");
-            InputStream templatePackageStream = getClass().getResourceAsStream("package.json");
-            Path tempPath = Files.createTempDirectory("web2app-maven-plugin");
-            File tempFile = tempPath.toFile();
-            tempFile.deleteOnExit();
-            Path packagePath = new File(tempFile, "package.json").toPath();
-            Files.deleteIfExists(packagePath);
-            Files.createDirectories(packagePath.getParent());
-            Files.copy(templatePackageStream, packagePath);
+            Path packagePath = getTempPathFromResource("package.json");
             executeMojo(
                     plugin(groupId("org.apache.maven.plugins"), artifactId("maven-resources-plugin"), version("2.7")),
                     goal("copy-resources"),
@@ -39,7 +35,7 @@ public class Setup extends Web2AppMojo {
                             element(name("overwrite"), "true"),
                             element(name("resources"),
                                     element("resource",
-                                            element(name("directory"), tempFile.getAbsolutePath()),
+                                            element(name("directory"), packagePath.getParent().toFile().getAbsolutePath()),
                                             element(name("filtering"), "true")
                                     ))
                     ),

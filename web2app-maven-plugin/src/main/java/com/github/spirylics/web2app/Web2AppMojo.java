@@ -12,14 +12,20 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class Web2AppMojo extends AbstractMojo {
+
+    @Parameter(defaultValue = "${web2app.clear}", readonly = true, required = false)
+    Boolean clear;
 
     /**
      * Directory where will be installed node & co
@@ -99,6 +105,13 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject mavenProject;
 
+
+    /**
+     * Maven ProjectHelper.
+     */
+    @Component
+    MavenProjectHelper projectHelper;
+
     /**
      * Maven session
      */
@@ -107,6 +120,26 @@ public abstract class Web2AppMojo extends AbstractMojo {
 
     @Component
     protected BuildPluginManager pluginManager;
+
+    File tempDir;
+
+    protected File getTempFile(String name) throws IOException {
+        if (tempDir == null) {
+            Path tempPath = Files.createTempDirectory("web2app-maven-plugin");
+            tempDir = tempPath.toFile();
+            tempDir.deleteOnExit();
+        }
+        return new File(tempDir, name);
+    }
+
+    protected Path getTempPathFromResource(String resourceName) throws IOException {
+        InputStream templatePackageStream = getClass().getResourceAsStream(resourceName);
+        Path path = getTempFile(resourceName).toPath();
+        Files.deleteIfExists(path);
+        Files.createDirectories(path.getParent());
+        Files.copy(templatePackageStream, path);
+        return path;
+    }
 
     protected File getPlatformsDir() {
         return new File(appDirectory, "platforms");
