@@ -26,6 +26,8 @@ public class Setup extends Web2AppMojo {
                 FileUtils.deleteDirectory(frontendWorkingDirectory);
             }
             mavenProject.getProperties().put("cordova.version", "~6.1.1");
+            mavenProject.getProperties().put("ios-sim.version", "~5.0.8");
+            mavenProject.getProperties().put("ios-deploy.version", "~1.8.5");
             Path packagePath = getTempPathFromResource("package.json");
             executeMojo(
                     plugin(groupId("org.apache.maven.plugins"), artifactId("maven-resources-plugin"), version("2.7")),

@@ -21,6 +21,7 @@
         <app.author.email>web2app@nope.mail</app.author.email>
         <app.author.site>${project.url}</app.author.site>
         <app.content>CarStore.html</app.content>
+        <platforms>browser,android,ios</platforms>
     </properties>
 
     <build>
@@ -34,17 +35,13 @@
                         <goals>
                             <goal>setup</goal>
                             <goal>create</goal>
+                            <goal>import</goal>
                             <goal>build</goal>
                             <goal>package</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <platforms>
-                        <platform>browser</platform>
-                        <platform>android</platform>
-                        <platform>ios</platform>
-                    </platforms>
                     <plugins>
                         <plugin>https://github.com/robertklein/cordova-ios-security.git</plugin>
                         <plugin>cordova-plugin-device</plugin>
@@ -63,8 +60,6 @@
                         <version>1.2.1</version>
                         <type>war</type>
                     </dependency>
-                    <appVersionCode>1</appVersionCode>
-                    <appContent>CarStore.html</appContent>
                     <icon>icons/ic_launcher.png</icon>
                     <splashscreen>${project.basedir}/splashscreen.png</splashscreen>
                     <themeColor>0xF8F8F8</themeColor>

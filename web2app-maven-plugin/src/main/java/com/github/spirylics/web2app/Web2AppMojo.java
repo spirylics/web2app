@@ -1,6 +1,10 @@
 package com.github.spirylics.web2app;
 
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.io.FileUtils;
@@ -21,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class Web2AppMojo extends AbstractMojo {
 
@@ -84,8 +90,8 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "index.html", readonly = true, required = true)
     String appContent;
 
-    @Parameter(readonly = true, required = true)
-    List<String> platforms = Arrays.asList("browser");
+    @Parameter(defaultValue = "${platforms}", readonly = true, required = true)
+    private List<String> platforms = Arrays.asList("browser");
 
     @Parameter(readonly = true, required = true)
     List<String> plugins = Arrays.asList();
@@ -157,6 +163,17 @@ public abstract class Web2AppMojo extends AbstractMojo {
         return new File(getWwwDir(), appContent);
     }
 
+    public Map<String, String> getPlatformsDeviceMap() {
+        return platforms.stream().map(d -> d.split("#")).collect(Collectors.toMap(
+                d -> d[0],
+                d -> d.length == 2 ? d[1] : ""
+        ));
+    }
+
+    public List<String> getPlatforms() {
+        return platforms.stream().map(d -> d.split("#")[0]).collect(Collectors.toList());
+    }
+
     protected void appendScript(File htmlFile, String scriptSrc) throws IOException {
         String content = FileUtils.readFileToString(htmlFile);
         if (!content.contains(scriptSrc)) {
@@ -178,6 +195,20 @@ public abstract class Web2AppMojo extends AbstractMojo {
         } else {
             throw new MojoExecutionException(action + ": FAILED");
         }
+    }
+
+    void runOrEmulate(String runOrEmulate) {
+        getPlatformsDeviceMap().entrySet().forEach(e -> {
+            try {
+                List<String> args = Lists.newArrayList(runOrEmulate, e.getKey());
+                if (!Strings.isNullOrEmpty(e.getValue())) {
+                    args.add("--target=\"" + e.getValue() + "\"");
+                }
+                execCordova(runOrEmulate + " " + Joiner.on(" ").join(args), appDirectory, Iterables.toArray(args, String.class));
+            } catch (Exception ex) {
+                throw new IllegalStateException(ex);
+            }
+        });
     }
 
     @Override

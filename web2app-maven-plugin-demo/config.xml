@@ -27,13 +27,8 @@
     </platform>
     <preference name="SplashScreen" value="splashscreen"/>
     <preference name="SplashMaintainAspectRatio" value="true"/>
-    <preference name="AutoHideSplashScreen" value="false"/>
-    <platform name="android">
-        <preference name="SplashScreenDelay" value="30000"/>
-    </platform>
-    <platform name="ios">
-        <preference name="SplashScreenDelay" value="0"/>
-    </platform>
+    <preference name="AutoHideSplashScreen" value="true"/>
+    <preference name="SplashScreenDelay" value="3000"/>
     <preference name="FadeSplashScreen" value="false"/>
     <preference name="FadeSplashScreenDuration" value="0"/>
     <preference name="ShowSplashScreenSpinner" value="true"/>

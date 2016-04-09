@@ -2,7 +2,12 @@
   "name": "${project.name}",
   "version": "1.0.0",
   "dependencies": {
-    "cordova": "${cordova.version}"
+    "cordova": "${cordova.version}",
+    "ios-sim": "${ios-sim.version}",
+    "ios-deploy": "${ios-deploy.version}"
+  },
+  "config": {
+    "unsafe-perm": true
   },
   "scripts": {
     "prebuild": "npm install"
