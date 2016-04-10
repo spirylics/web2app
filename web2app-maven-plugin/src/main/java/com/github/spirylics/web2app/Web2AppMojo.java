@@ -105,6 +105,18 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(readonly = true, required = false)
     String themeColor = null;
 
+    @Parameter(defaultValue = "${build.type}", readonly = true, required = true)
+    private String buildType;
+
+    @Parameter(defaultValue = "${project.basedir}/app.keystore", readonly = true, required = true)
+    File keystore;
+
+    @Parameter(readonly = true, required = false)
+    String keystorePassword;
+
+    @Parameter(defaultValue = "${app.name}", readonly = true, required = false)
+    String alias;
+
     /**
      * Maven project
      */
@@ -174,6 +186,10 @@ public abstract class Web2AppMojo extends AbstractMojo {
         return platforms.stream().map(d -> d.split("#")[0]).collect(Collectors.toList());
     }
 
+    public String getBuildType() {
+        return Strings.isNullOrEmpty(buildType) ? "release" : buildType;
+    }
+
     protected void appendScript(File htmlFile, String scriptSrc) throws IOException {
         String content = FileUtils.readFileToString(htmlFile);
         if (!content.contains(scriptSrc)) {
@@ -184,17 +200,28 @@ public abstract class Web2AppMojo extends AbstractMojo {
         }
     }
 
-    void execCordova(String action, File dir, String... args) throws Exception {
+    void exec(String action, File dir, CommandLine cmdLine) {
+        String label = action + ": " + cmdLine;
+        try {
+            DefaultExecutor executor = new DefaultExecutor();
+            executor.setWorkingDirectory(dir);
+            int exitValue = executor.execute(cmdLine);
+            if (exitValue == 0) {
+                getLog().info(label + ": OK");
+            } else {
+                throw new MojoExecutionException("EXEC FAILURE: " + label);
+            }
+        } catch (RuntimeException re) {
+            throw re;
+        } catch (Exception e) {
+            throw new IllegalStateException("EXEC FAILURE: " + label, e);
+        }
+    }
+
+    void execCordova(String action, File dir, String... args) {
         CommandLine commandLine = new CommandLine(cordovaExec);
         commandLine.addArguments(args);
-        DefaultExecutor executor = new DefaultExecutor();
-        executor.setWorkingDirectory(dir);
-        int exitValue = executor.execute(commandLine);
-        if (exitValue == 0) {
-            getLog().info(action + ": OK");
-        } else {
-            throw new MojoExecutionException(action + ": FAILED");
-        }
+        exec(action, dir, commandLine);
     }
 
     void runOrEmulate(String runOrEmulate) {

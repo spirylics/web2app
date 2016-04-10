@@ -22,6 +22,7 @@
         <app.author.site>${project.url}</app.author.site>
         <app.content>CarStore.html</app.content>
         <platforms>browser,android,ios</platforms>
+        <build.type>release</build.type>
     </properties>
 
     <build>
@@ -63,6 +64,7 @@
                     <icon>icons/ic_launcher.png</icon>
                     <splashscreen>${project.basedir}/splashscreen.png</splashscreen>
                     <themeColor>0xF8F8F8</themeColor>
+                    <keystorePassword>fjp1d5v7Kd15f3x7</keystorePassword>
                 </configuration>
             </plugin>
         </plugins>

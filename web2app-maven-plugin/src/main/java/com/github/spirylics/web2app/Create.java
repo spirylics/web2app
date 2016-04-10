@@ -22,17 +22,15 @@ public class Create extends Web2AppMojo {
         } else {
             getLog().info("cordova project already created");
         }
-        for (String platform : getPlatforms()) {
+        getPlatforms().forEach(platform -> {
             File platformDir = getPlatformDir(platform);
             if (platformDir.exists()) {
                 getLog().info(platform + " platform already exists");
             } else {
                 execCordova("add " + platform + " platform", appDirectory, "platforms", "add", platform);
             }
-        }
-        for (String plugin : plugins) {
-            execCordova("add " + plugin + " plugin", appDirectory, "plugin", "add", plugin);
-        }
+        });
+        plugins.forEach(plugin -> execCordova("add " + plugin + " plugin", appDirectory, "plugin", "add", plugin));
     }
 
 }

@@ -62,7 +62,7 @@ public class Import extends Web2AppMojo {
 
     void importConfig() throws MojoExecutionException {
         executeMojo(
-                plugin(groupId("org.apache.maven.plugins"), artifactId("maven-resources-plugin"), version("2.7")),
+                plugin("org.apache.maven.plugins", "maven-resources-plugin", "2.7"),
                 goal("copy-resources"),
                 configuration(
                         element(name("outputDirectory"), appDirectory.getAbsolutePath()),

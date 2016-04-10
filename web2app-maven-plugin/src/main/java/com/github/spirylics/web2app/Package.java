@@ -5,30 +5,70 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.exec.CommandLine;
 import org.apache.commons.io.FileUtils;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Collection;
 
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PACKAGE;
 
 /**
- * Package in zip
+ * Sign & Package in zip
  */
 @Mojo(name = "package", defaultPhase = PACKAGE, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class Package extends Web2AppMojo {
 
     @Override
     public void e() throws Exception {
+        signAndroid();
+        zip();
+    }
+
+    void signAndroid() throws MojoExecutionException, IOException {
+        File apkDir = new File(getPlatformDir("android"), "/build/outputs/apk");
+        Files.find(apkDir.toPath(), 1,
+                (path, basicFileAttributes) -> path.toFile().getName().matches(".*-release-.*apk$"))
+                .forEach(p -> {
+                    File apkFile = p.toFile();
+
+                    CommandLine sign = new CommandLine("jarsigner");
+                    sign.addArguments("-verbose");
+                    sign.addArguments("-sigalg");
+                    sign.addArguments("SHA1withRSA");
+                    sign.addArguments("-digestalg");
+                    sign.addArguments("SHA1");
+                    sign.addArguments("-keystore");
+                    sign.addArguments(keystore.getAbsolutePath());
+                    sign.addArguments("-keypass");
+                    sign.addArguments(keystorePassword);
+                    sign.addArguments("-storepass");
+                    sign.addArguments(keystorePassword);
+                    sign.addArguments(apkFile.getName());
+                    sign.addArguments(alias);
+                    exec("sign", apkDir, sign);
+
+                    CommandLine zipalign = new CommandLine("zipalign");
+                    zipalign.addArguments("-v");
+                    zipalign.addArguments("4");
+                    zipalign.addArguments(apkFile.getName());
+                    zipalign.addArguments(apkFile.getName().replace("-unsigned", ""));
+                    exec("zipalign", apkDir, zipalign);
+                });
+    }
+
+    void zip() throws IOException, ArchiveException {
         File destination = new File(buildDirectory, appName + ".zip");
         destination.delete();
-        addFilesToZip(getPlatformsDir(), destination);
+        addFilesToZip(appDirectory, destination);
         projectHelper.attachArtifact(mavenProject, "zip", destination);
     }
 
-    private void addFilesToZip(File source, File destination) throws IOException, ArchiveException {
+    void addFilesToZip(File source, File destination) throws IOException, ArchiveException {
         OutputStream archiveStream = new FileOutputStream(destination);
         ArchiveOutputStream archive = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, archiveStream);
         Collection<File> fileList = FileUtils.listFiles(source, null, true);
@@ -45,7 +85,7 @@ public class Package extends Web2AppMojo {
         archiveStream.close();
     }
 
-    private String getEntryName(File source, File file) throws IOException {
+    String getEntryName(File source, File file) throws IOException {
         int index = source.getAbsolutePath().length() + 1;
         String path = file.getCanonicalPath();
         return path.substring(index);

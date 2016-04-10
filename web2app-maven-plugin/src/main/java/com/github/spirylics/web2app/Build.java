@@ -13,7 +13,7 @@ public class Build extends Web2AppMojo {
 
     @Override
     public void e() throws Exception {
-        execCordova("build", appDirectory, "build");
+        execCordova("build", appDirectory, "build", " --" + getBuildType());
     }
 
 }
