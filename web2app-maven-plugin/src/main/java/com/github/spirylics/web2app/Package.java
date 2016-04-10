@@ -25,7 +25,9 @@ public class Package extends Web2AppMojo {
 
     @Override
     public void e() throws Exception {
-        signAndroid();
+        if (BuildType.release.equals(getBuildType())) {
+            signAndroid();
+        }
         zip();
     }
 
@@ -39,18 +41,23 @@ public class Package extends Web2AppMojo {
                     CommandLine sign = new CommandLine("jarsigner");
                     sign.addArguments("-verbose");
                     sign.addArguments("-sigalg");
-                    sign.addArguments("SHA1withRSA");
+                    sign.addArguments(signAlg);
                     sign.addArguments("-digestalg");
-                    sign.addArguments("SHA1");
+                    sign.addArguments(signDigestalg);
                     sign.addArguments("-keystore");
-                    sign.addArguments(keystore.getAbsolutePath());
+                    sign.addArguments(signKeystore.getAbsolutePath());
                     sign.addArguments("-keypass");
-                    sign.addArguments(keystorePassword);
+                    sign.addArguments(signKeypass);
                     sign.addArguments("-storepass");
-                    sign.addArguments(keystorePassword);
+                    sign.addArguments(signStorepass);
                     sign.addArguments(apkFile.getName());
-                    sign.addArguments(alias);
+                    sign.addArguments(signAlias);
                     exec("sign", apkDir, sign);
+
+                    CommandLine verify = new CommandLine("jarsigner");
+                    verify.addArguments("-verify");
+                    verify.addArguments(apkFile.getName());
+                    exec("verify", apkDir, verify);
 
                     CommandLine zipalign = new CommandLine("zipalign");
                     zipalign.addArguments("-v");

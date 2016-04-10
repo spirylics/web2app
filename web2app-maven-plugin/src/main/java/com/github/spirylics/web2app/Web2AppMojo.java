@@ -106,16 +106,34 @@ public abstract class Web2AppMojo extends AbstractMojo {
     String themeColor = null;
 
     @Parameter(defaultValue = "${build.type}", readonly = true, required = true)
-    private String buildType;
+    private BuildType buildType;
 
-    @Parameter(defaultValue = "${project.basedir}/app.keystore", readonly = true, required = true)
-    File keystore;
+    @Parameter(defaultValue = "${sign.keystore}", readonly = true, required = true)
+    File signKeystore;
 
-    @Parameter(readonly = true, required = false)
-    String keystorePassword;
+    @Parameter(defaultValue = "${sign.keypass}", readonly = true, required = true)
+    String signKeypass;
 
-    @Parameter(defaultValue = "${app.name}", readonly = true, required = false)
-    String alias;
+    @Parameter(defaultValue = "${sign.storepass}", readonly = true, required = false)
+    String signStorepass;
+
+    @Parameter(defaultValue = "${sign.alias}", readonly = true, required = false)
+    String signAlias;
+
+    @Parameter(defaultValue = "SHA1withRSA", readonly = true, required = false)
+    String signAlg;
+
+    @Parameter(defaultValue = "SHA1", readonly = true, required = false)
+    String signDigestalg;
+
+    @Parameter(defaultValue = "RSA", readonly = true, required = false)
+    String signKeyAlg;
+
+    @Parameter(defaultValue = "2048", readonly = true, required = false)
+    String signKeySize;
+
+    @Parameter(defaultValue = "99999", readonly = true, required = false)
+    String signValidity;
 
     /**
      * Maven project
@@ -186,8 +204,8 @@ public abstract class Web2AppMojo extends AbstractMojo {
         return platforms.stream().map(d -> d.split("#")[0]).collect(Collectors.toList());
     }
 
-    public String getBuildType() {
-        return Strings.isNullOrEmpty(buildType) ? "release" : buildType;
+    public BuildType getBuildType() {
+        return buildType == null ? BuildType.release : buildType;
     }
 
     protected void appendScript(File htmlFile, String scriptSrc) throws IOException {

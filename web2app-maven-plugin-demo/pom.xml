@@ -23,6 +23,10 @@
         <app.content>CarStore.html</app.content>
         <platforms>browser,android,ios</platforms>
         <build.type>release</build.type>
+        <sign.keystore>${basedir}/app.keystore</sign.keystore>
+        <sign.alias>${app.name}</sign.alias>
+        <sign.keypass>azerty</sign.keypass>
+        <sign.storepass>${sign.keypass}</sign.storepass>
     </properties>
 
     <build>
@@ -64,7 +68,6 @@
                     <icon>icons/ic_launcher.png</icon>
                     <splashscreen>${project.basedir}/splashscreen.png</splashscreen>
                     <themeColor>0xF8F8F8</themeColor>
-                    <keystorePassword>fjp1d5v7Kd15f3x7</keystorePassword>
                 </configuration>
             </plugin>
         </plugins>
