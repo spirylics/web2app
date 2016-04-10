@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -33,10 +32,8 @@ public class Import extends Web2AppMojo {
     void importWebApp() throws Exception {
         FileUtils.deleteDirectory(getWwwDir());
         Files.createDirectories(getWwwDir().toPath());
-        executeMojo(
-                plugin("org.apache.maven.plugins", "maven-dependency-plugin", "2.10"),
-                goal("unpack"),
-                configuration(
+        execMojo("org.apache.maven.plugins", "maven-dependency-plugin"
+                , configuration(
                         element(name("overWriteReleases"), "false"),
                         element(name("overWriteSnapshots"), "true"),
                         element(name("artifactItems"),
@@ -51,20 +48,13 @@ public class Import extends Web2AppMojo {
                                         element(name("includes"), dependencyIncludes),
                                         element(name("excludes"), dependencyExcludes)
                                 ))
-                ),
-                executionEnvironment(
-                        mavenProject,
-                        mavenSession,
-                        pluginManager
                 )
-        );
+                , "unpack");
     }
 
     void importConfig() throws MojoExecutionException {
-        executeMojo(
-                plugin("org.apache.maven.plugins", "maven-resources-plugin", "2.7"),
-                goal("copy-resources"),
-                configuration(
+        execMojo("org.apache.maven.plugins", "maven-resources-plugin"
+                , configuration(
                         element(name("outputDirectory"), appDirectory.getAbsolutePath()),
                         element(name("overwrite"), "true"),
                         element(name("resources"),
@@ -73,13 +63,8 @@ public class Import extends Web2AppMojo {
                                         element(name("filtering"), "true"),
                                         element(name("includes"), element(name("include"), appConfig.getName()))
                                 ))
-                ),
-                executionEnvironment(
-                        mavenProject,
-                        mavenSession,
-                        pluginManager
                 )
-        );
+                , "copy-resources");
     }
 
     void injectCordovaJs() throws IOException {
@@ -98,22 +83,12 @@ public class Import extends Web2AppMojo {
                 return FileVisitResult.CONTINUE;
             }
         });
-        Xpp3Dom configuration = configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), getWwwDir().getAbsolutePath(), themeColor, getPlatforms())
-                .addIcon(icon)
-                .addSplashscreen(splashscreen)
-                .build());
-        executeMojo(
-                plugin("com.filmon.maven", "image-maven-plugin", "1.2.1"),
-                "scale",
-                configuration,
-                executionEnvironment(mavenProject, mavenSession, pluginManager)
-        );
-        executeMojo(
-                plugin("com.filmon.maven", "image-maven-plugin", "1.2.1"),
-                "crop",
-                configuration,
-                executionEnvironment(mavenProject, mavenSession, pluginManager)
-        );
+        execMojo("com.filmon.maven", "image-maven-plugin"
+                , configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), getWwwDir().getAbsolutePath(), themeColor, getPlatforms())
+                        .addIcon(icon)
+                        .addSplashscreen(splashscreen)
+                        .build())
+                , "scale", "crop");
     }
 
 }

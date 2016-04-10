@@ -17,6 +17,7 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 
 public abstract class Web2AppMojo extends AbstractMojo {
 
@@ -256,8 +259,40 @@ public abstract class Web2AppMojo extends AbstractMojo {
         });
     }
 
+    protected String getVersion(String name) {
+        return mavenProject.getProperties().getProperty(name + ".version");
+    }
+
+    protected void execMojo(String groupId, String artifactId, Xpp3Dom configuration, String goal, String... goals) throws MojoExecutionException {
+        List<String> goalList = Lists.newArrayList(goals);
+        goalList.add(0, goal);
+        for (String g : goalList) {
+            executeMojo(
+                    plugin(groupId, artifactId, getVersion(artifactId)),
+                    g,
+                    configuration,
+                    executionEnvironment(
+                            mavenProject,
+                            mavenSession,
+                            pluginManager
+                    )
+            );
+        }
+    }
+
     @Override
-    public void execute() throws MojoExecutionException {
+    public final void execute() throws MojoExecutionException {
+        mavenProject.getProperties().putIfAbsent("node.version", "v5.10.1");
+        mavenProject.getProperties().putIfAbsent("npm.version", "3.8.3");
+        mavenProject.getProperties().putIfAbsent("cordova.version", "*");
+        mavenProject.getProperties().putIfAbsent("ios-sim.version", "*");
+        mavenProject.getProperties().putIfAbsent("ios-deploy.version", "*");
+        mavenProject.getProperties().putIfAbsent("exec-maven-plugin.version", "1.4.0");
+        mavenProject.getProperties().putIfAbsent("maven-dependency-plugin.version", "2.10");
+        mavenProject.getProperties().putIfAbsent("maven-resources-plugin.version", "2.7");
+        mavenProject.getProperties().putIfAbsent("image-maven-plugin.version", "1.2.1");
+        mavenProject.getProperties().putIfAbsent("frontend-maven-plugin.version", "0.0.29");
+
         try {
             e();
         } catch (Exception e) {

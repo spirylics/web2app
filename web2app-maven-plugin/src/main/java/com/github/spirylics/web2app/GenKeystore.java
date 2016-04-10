@@ -12,10 +12,8 @@ public class GenKeystore extends Web2AppMojo {
 
     @Override
     public void e() throws Exception {
-        executeMojo(
-                plugin("org.codehaus.mojo", "exec-maven-plugin", "1.4.0"),
-                goal("exec"),
-                configuration(
+        execMojo("org.codehaus.mojo", "exec-maven-plugin"
+                , configuration(
                         element("executable", "keytool"),
                         element(name("arguments"),
                                 element("argument", "-genkey"),
@@ -35,13 +33,8 @@ public class GenKeystore extends Web2AppMojo {
                                 element("argument", "-validity"),
                                 element("argument", signValidity)
                         )
-                ),
-                executionEnvironment(
-                        mavenProject,
-                        mavenSession,
-                        pluginManager
                 )
-        );
+                , "exec");
     }
 
 }
