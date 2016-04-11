@@ -260,7 +260,7 @@ public abstract class Web2AppMojo extends AbstractMojo {
     }
 
     protected String getVersion(String name) {
-        return mavenProject.getProperties().getProperty(name + ".version");
+        return mavenProject.getProperties().getProperty("version." + name);
     }
 
     protected void execMojo(String groupId, String artifactId, Xpp3Dom configuration, String goal, String... goals) throws MojoExecutionException {
@@ -282,16 +282,16 @@ public abstract class Web2AppMojo extends AbstractMojo {
 
     @Override
     public final void execute() throws MojoExecutionException {
-        mavenProject.getProperties().putIfAbsent("node.version", "v5.10.1");
-        mavenProject.getProperties().putIfAbsent("npm.version", "3.8.3");
-        mavenProject.getProperties().putIfAbsent("cordova.version", "*");
-        mavenProject.getProperties().putIfAbsent("ios-sim.version", "*");
-        mavenProject.getProperties().putIfAbsent("ios-deploy.version", "*");
-        mavenProject.getProperties().putIfAbsent("exec-maven-plugin.version", "1.4.0");
-        mavenProject.getProperties().putIfAbsent("maven-dependency-plugin.version", "2.10");
-        mavenProject.getProperties().putIfAbsent("maven-resources-plugin.version", "2.7");
-        mavenProject.getProperties().putIfAbsent("image-maven-plugin.version", "1.2.1");
-        mavenProject.getProperties().putIfAbsent("frontend-maven-plugin.version", "0.0.29");
+        mavenProject.getProperties().putIfAbsent("version.node", "v5.10.1");
+        mavenProject.getProperties().putIfAbsent("version.npm", "3.8.3");
+        mavenProject.getProperties().putIfAbsent("version.cordova", "*");
+        mavenProject.getProperties().putIfAbsent("version.ios-sim", "*");
+        mavenProject.getProperties().putIfAbsent("version.ios-deploy", "*");
+        mavenProject.getProperties().putIfAbsent("version.exec-maven-plugin", "1.4.0");
+        mavenProject.getProperties().putIfAbsent("version.maven-dependency-plugin", "2.10");
+        mavenProject.getProperties().putIfAbsent("version.maven-resources-plugin", "2.7");
+        mavenProject.getProperties().putIfAbsent("version.image-maven-plugin", "1.2.1");
+        mavenProject.getProperties().putIfAbsent("version.frontend-maven-plugin", "0.0.29");
 
         try {
             e();
