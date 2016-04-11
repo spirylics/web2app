@@ -78,13 +78,13 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "${app.version.code}", readonly = true, required = true)
     String appVersionCode;
 
-    @Parameter(defaultValue = "${app.description}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.description}", readonly = true, required = false)
     String appDescription;
 
-    @Parameter(defaultValue = "${app.author.email}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.author.email}", readonly = true, required = false)
     String appAuthorEmail;
 
-    @Parameter(defaultValue = "${app.author.site}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.author.site}", readonly = true, required = false)
     String appAuthorSite;
 
     @Parameter(defaultValue = "${app.content}", readonly = true, required = true)

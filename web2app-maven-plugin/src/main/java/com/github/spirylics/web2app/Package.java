@@ -33,39 +33,41 @@ public class Package extends Web2AppMojo {
 
     void signAndroid() throws MojoExecutionException, IOException {
         File apkDir = new File(getPlatformDir("android"), "/build/outputs/apk");
-        Files.find(apkDir.toPath(), 1,
-                (path, basicFileAttributes) -> path.toFile().getName().matches(".*-release-.*apk$"))
-                .forEach(p -> {
-                    File apkFile = p.toFile();
+        if (apkDir.exists()) {
+            Files.find(apkDir.toPath(), 1,
+                    (path, basicFileAttributes) -> path.toFile().getName().matches(".*-release-.*apk$"))
+                    .forEach(p -> {
+                        File apkFile = p.toFile();
 
-                    CommandLine sign = new CommandLine("jarsigner");
-                    sign.addArguments("-verbose");
-                    sign.addArguments("-sigalg");
-                    sign.addArguments(signAlg);
-                    sign.addArguments("-digestalg");
-                    sign.addArguments(signDigestalg);
-                    sign.addArguments("-keystore");
-                    sign.addArguments(signKeystore.getAbsolutePath());
-                    sign.addArguments("-keypass");
-                    sign.addArguments(signKeypass);
-                    sign.addArguments("-storepass");
-                    sign.addArguments(signStorepass);
-                    sign.addArguments(apkFile.getName());
-                    sign.addArguments(signAlias);
-                    exec("sign", apkDir, sign);
+                        CommandLine sign = new CommandLine("jarsigner");
+                        sign.addArguments("-verbose");
+                        sign.addArguments("-sigalg");
+                        sign.addArguments(signAlg);
+                        sign.addArguments("-digestalg");
+                        sign.addArguments(signDigestalg);
+                        sign.addArguments("-keystore");
+                        sign.addArguments(signKeystore.getAbsolutePath());
+                        sign.addArguments("-keypass");
+                        sign.addArguments(signKeypass);
+                        sign.addArguments("-storepass");
+                        sign.addArguments(signStorepass);
+                        sign.addArguments(apkFile.getName());
+                        sign.addArguments(signAlias);
+                        exec("sign", apkDir, sign);
 
-                    CommandLine verify = new CommandLine("jarsigner");
-                    verify.addArguments("-verify");
-                    verify.addArguments(apkFile.getName());
-                    exec("verify", apkDir, verify);
+                        CommandLine verify = new CommandLine("jarsigner");
+                        verify.addArguments("-verify");
+                        verify.addArguments(apkFile.getName());
+                        exec("verify", apkDir, verify);
 
-                    CommandLine zipalign = new CommandLine("zipalign");
-                    zipalign.addArguments("-v");
-                    zipalign.addArguments("4");
-                    zipalign.addArguments(apkFile.getName());
-                    zipalign.addArguments(apkFile.getName().replace("-unsigned", ""));
-                    exec("zipalign", apkDir, zipalign);
-                });
+                        CommandLine zipalign = new CommandLine("zipalign");
+                        zipalign.addArguments("-v");
+                        zipalign.addArguments("4");
+                        zipalign.addArguments(apkFile.getName());
+                        zipalign.addArguments(apkFile.getName().replace("-unsigned", ""));
+                        exec("zipalign", apkDir, zipalign);
+                    });
+        }
     }
 
     void zip() throws IOException, ArchiveException {
