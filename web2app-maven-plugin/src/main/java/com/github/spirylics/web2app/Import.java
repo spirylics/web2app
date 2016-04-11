@@ -84,9 +84,9 @@ public class Import extends Web2AppMojo {
             }
         });
         execMojo("com.filmon.maven", "image-maven-plugin"
-                , configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), getWwwDir().getAbsolutePath(), themeColor, getPlatforms())
-                        .addIcon(icon)
-                        .addSplashscreen(splashscreen)
+                , configuration(new ImagesGenBuilder(getPlatformsDir().getAbsolutePath(), getWwwDir().getAbsolutePath(), appThemeColor, getPlatforms())
+                        .addIcon(appIcon)
+                        .addSplashscreen(appSplashscreen)
                         .build())
                 , "scale", "crop");
     }

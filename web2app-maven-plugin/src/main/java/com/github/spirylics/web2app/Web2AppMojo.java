@@ -87,26 +87,26 @@ public abstract class Web2AppMojo extends AbstractMojo {
     @Parameter(defaultValue = "${app.author.site}", readonly = true, required = true)
     String appAuthorSite;
 
+    @Parameter(defaultValue = "${app.content}", readonly = true, required = true)
+    String appContent;
+
+    @Parameter(defaultValue = "${app.icon}", readonly = true, required = true)
+    String appIcon;
+
+    @Parameter(defaultValue = "${app.splashscreen}", readonly = true, required = true)
+    String appSplashscreen;
+
+    @Parameter(defaultValue = "${app.themeColor}", readonly = true, required = true)
+    String appThemeColor = null;
+
     @Parameter(defaultValue = "${project.basedir}/config.xml", readonly = true, required = true)
     File appConfig;
-
-    @Parameter(defaultValue = "index.html", readonly = true, required = true)
-    String appContent;
 
     @Parameter(defaultValue = "${platforms}", readonly = true, required = true)
     private List<String> platforms = Arrays.asList("browser");
 
     @Parameter(readonly = true, required = true)
     List<String> plugins = Arrays.asList();
-
-    @Parameter(defaultValue = "", readonly = true, required = true)
-    String icon;
-
-    @Parameter(defaultValue = "", readonly = true, required = true)
-    String splashscreen;
-
-    @Parameter(readonly = true, required = false)
-    String themeColor = null;
 
     @Parameter(defaultValue = "${build.type}", readonly = true, required = true)
     private BuildType buildType;

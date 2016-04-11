@@ -21,6 +21,9 @@
         <app.author.email>web2app@nope.mail</app.author.email>
         <app.author.site>${project.url}</app.author.site>
         <app.content>CarStore.html</app.content>
+        <app.icon>icons/ic_launcher.png</app.icon>
+        <app.splashscreen>${project.basedir}/splashscreen.png</app.splashscreen>
+        <app.themeColor>0xF8F8F8</app.themeColor>
         <platforms>browser,android,ios</platforms>
         <build.type>release</build.type>
         <sign.keystore>${basedir}/app.keystore</sign.keystore>
@@ -65,9 +68,6 @@
                         <version>1.2.1</version>
                         <type>war</type>
                     </dependency>
-                    <icon>icons/ic_launcher.png</icon>
-                    <splashscreen>${project.basedir}/splashscreen.png</splashscreen>
-                    <themeColor>0xF8F8F8</themeColor>
                 </configuration>
             </plugin>
         </plugins>
