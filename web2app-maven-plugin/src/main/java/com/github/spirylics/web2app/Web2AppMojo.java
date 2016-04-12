@@ -214,10 +214,10 @@ public abstract class Web2AppMojo extends AbstractMojo {
     protected void appendScript(File htmlFile, String scriptSrc) throws IOException {
         String content = FileUtils.readFileToString(htmlFile);
         if (!content.contains(scriptSrc)) {
-            content.replaceFirst(
+            Files.write(htmlFile.toPath(), content.replaceFirst(
                     "</head>",
-                    String.format("\t<script type=\"text/javascript\" src=\"%s\"></script>\n</head>", scriptSrc));
-            Files.write(htmlFile.toPath(), content.getBytes());
+                    String.format("\t<script type=\"text/javascript\" src=\"%s\"></script>\n</head>", scriptSrc)).getBytes());
+            getLog().info(String.format("append script %s on %s", scriptSrc, htmlFile.getAbsolutePath()));
         }
     }
 

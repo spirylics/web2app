@@ -68,6 +68,7 @@ public class Import extends Web2AppMojo {
     }
 
     void injectCordovaJs() throws IOException {
+        getLog().info("inject cordova js");
         appendScript(getContentFile(), "cordova.js");
     }
 
