@@ -39,7 +39,7 @@ In more you can:
         mvn web2app:run -Dplatforms=android#12345,ios#12345
     
 
-## Example of configuration from pom.xml
+## Configuration example (pom.xml)
 
 ```xml
     <properties>
@@ -70,7 +70,7 @@ In more you can:
             <plugin>
                 <groupId>com.github.spirylics.web2app</groupId>
                 <artifactId>web2app-maven-plugin</artifactId>
-                <version>${project.parent.version}</version>
+                <version>1.0-bet4</version>
                 <executions>
                     <execution>
                         <goals>
