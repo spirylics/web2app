@@ -18,7 +18,7 @@ import java.util.Collection;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PACKAGE;
 
 /**
- * Sign & Package in zip
+ * Sign and Package in zip
  */
 @Mojo(name = "package", defaultPhase = PACKAGE, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class Package extends Web2AppMojo {
