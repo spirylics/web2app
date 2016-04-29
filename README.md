@@ -72,7 +72,7 @@ In more you can:
             <plugin>
                 <groupId>com.github.spirylics.web2app</groupId>
                 <artifactId>web2app-maven-plugin</artifactId>
-                <version>1.0-bet4</version>
+                <version>1.0-beta4</version>
                 <executions>
                     <execution>
                         <goals>
