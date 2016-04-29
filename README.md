@@ -20,6 +20,8 @@ web2app is based on maven lifecycle to generate applications for each platforms 
 
 * package: Sign archives if necessary and make a zip with all platforms
 
+        mvn package -Dplatforms=android,ios,browser    
+
 In more you can:
 
 * Generate a keystore at the beginning to release your application:
