@@ -22,7 +22,7 @@
         <app.icon>icons/ic_launcher.png</app.icon>
         <app.splashscreen>${project.basedir}/splashscreen.png</app.splashscreen>
         <app.themeColor>0xF8F8F8</app.themeColor>
-        <platforms>browser,android,ios</platforms>
+        <platforms>browser</platforms>
         <build.type>release</build.type>
         <sign.keystore>${basedir}/app.keystore</sign.keystore>
         <sign.alias>${app.name}</sign.alias>
