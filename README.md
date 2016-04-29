@@ -8,7 +8,7 @@ JDK8+, Maven3+ and SDKs of each platforms like android sdk or xcode.
 
 ## Features
 
-web2app creates an application lifecycle to generate applications for each platforms taking care of boring business.
+web2app is based on maven lifecycle to generate applications for each platforms taking care of boring business.
 
 * setup: Install node cordova locally - comfort test of new version and multiproject management
 
@@ -20,7 +20,7 @@ web2app creates an application lifecycle to generate applications for each platf
 
 * package: Sign archives if necessary and make a zip with all platforms
 
-In more you can::
+In more you can:
 
 * Generate a keystore at the beginning to release your application:
         
@@ -39,7 +39,7 @@ In more you can::
         mvn web2app:run -Dplatforms=android#12345,ios#12345
     
 
-## Examples
+## Example of configuration from pom.xml
 
 ```xml
     <properties>
@@ -106,3 +106,5 @@ In more you can::
         </plugins>
     </build>
 ```
+
+See [web2app-maven-plugin-demo](https://github.com/spirylics/web2app/tree/master/web2app-maven-plugin-demo) for full example.
