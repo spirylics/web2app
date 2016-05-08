@@ -33,115 +33,115 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 
 public abstract class Web2AppMojo extends AbstractMojo {
 
-    @Parameter(defaultValue = "${web2app.clear}", readonly = true, required = false)
+    @Parameter(defaultValue = "${web2app.clear}")
     Boolean clear;
 
     /**
      * Directory where will be installed node & co
      */
-    @Parameter(defaultValue = "${project.basedir}/frontend", readonly = true, required = true)
+    @Parameter(defaultValue = "${project.basedir}/frontend", required = true)
     File frontendDirectory;
 
     /**
      * Directory where will be installed frontend dependencies
      */
-    @Parameter(defaultValue = "${project.basedir}/working", readonly = true, required = true)
+    @Parameter(defaultValue = "${project.basedir}/working", required = true)
     File frontendWorkingDirectory;
 
-    @Parameter(defaultValue = "${project.build.directory}", readonly = true, required = true)
+    @Parameter(defaultValue = "${project.build.directory}", required = true)
     File buildDirectory;
 
-    @Parameter(defaultValue = "${project.basedir}/working/node_modules/cordova/bin/cordova", readonly = true, required = true)
+    @Parameter(defaultValue = "${project.basedir}/working/node_modules/cordova/bin/cordova", required = true)
     File cordovaExec;
 
-    @Parameter(defaultValue = "${project.build.directory}/${project.name}-${project.version}", readonly = true, required = true)
+    @Parameter(defaultValue = "${project.build.directory}/${project.name}-${project.version}", required = true)
     File appDirectory;
 
-    @Parameter(readonly = true, required = true)
+    @Parameter(required = true)
     Dependency dependency;
 
-    @Parameter(defaultValue = "**", readonly = true, required = true)
+    @Parameter(defaultValue = "**", required = true)
     String dependencyIncludes;
 
-    @Parameter(defaultValue = "META-INF/,WEB-INF/", readonly = true, required = true)
+    @Parameter(defaultValue = "META-INF/,WEB-INF/", required = true)
     String dependencyExcludes;
 
-    @Parameter(defaultValue = "${app.group}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.group}", required = true)
     String appGroup;
 
-    @Parameter(defaultValue = "${app.name}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.name}", required = true)
     String appName;
 
-    @Parameter(defaultValue = "${app.version}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.version}", required = true)
     String appVersion;
 
-    @Parameter(defaultValue = "${app.version.code}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.version.code}", required = true)
     String appVersionCode;
 
-    @Parameter(defaultValue = "${app.description}", readonly = true, required = false)
+    @Parameter(defaultValue = "${app.description}")
     String appDescription;
 
-    @Parameter(defaultValue = "${app.author.email}", readonly = true, required = false)
+    @Parameter(defaultValue = "${app.author.email}")
     String appAuthorEmail;
 
-    @Parameter(defaultValue = "${app.author.site}", readonly = true, required = false)
+    @Parameter(defaultValue = "${app.author.site}")
     String appAuthorSite;
 
-    @Parameter(defaultValue = "${app.content}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.content}", required = true)
     String appContent;
 
-    @Parameter(defaultValue = "${app.icon}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.icon}", required = true)
     String appIcon;
 
-    @Parameter(defaultValue = "${app.splashscreen}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.splashscreen}", required = true)
     String appSplashscreen;
 
-    @Parameter(defaultValue = "${app.themeColor}", readonly = true, required = true)
+    @Parameter(defaultValue = "${app.themeColor}", required = true)
     String appThemeColor = null;
 
-    @Parameter(defaultValue = "${project.basedir}/config.xml", readonly = true, required = true)
+    @Parameter(defaultValue = "${project.basedir}/config.xml", required = true)
     File appConfig;
 
-    @Parameter(defaultValue = "${platforms}", readonly = true, required = true)
+    @Parameter(defaultValue = "${platforms}", required = true)
     private List<String> platforms = Arrays.asList("browser");
 
-    @Parameter(readonly = true, required = true)
+    @Parameter(required = true)
     List<String> plugins = Arrays.asList();
 
-    @Parameter(defaultValue = "${build.type}", readonly = true, required = true)
+    @Parameter(defaultValue = "${build.type}", required = true)
     private BuildType buildType;
 
-    @Parameter(defaultValue = "${sign.keystore}", readonly = true, required = true)
+    @Parameter(defaultValue = "${sign.keystore}", required = true)
     File signKeystore;
 
-    @Parameter(defaultValue = "${sign.keypass}", readonly = true, required = true)
+    @Parameter(defaultValue = "${sign.keypass}", required = true)
     String signKeypass;
 
-    @Parameter(defaultValue = "${sign.storepass}", readonly = true, required = false)
+    @Parameter(defaultValue = "${sign.storepass}")
     String signStorepass;
 
-    @Parameter(defaultValue = "${sign.alias}", readonly = true, required = false)
+    @Parameter(defaultValue = "${sign.alias}")
     String signAlias;
 
-    @Parameter(defaultValue = "SHA1withRSA", readonly = true, required = false)
+    @Parameter(defaultValue = "SHA1withRSA")
     String signAlg;
 
-    @Parameter(defaultValue = "SHA1", readonly = true, required = false)
+    @Parameter(defaultValue = "SHA1")
     String signDigestalg;
 
-    @Parameter(defaultValue = "RSA", readonly = true, required = false)
+    @Parameter(defaultValue = "RSA")
     String signKeyAlg;
 
-    @Parameter(defaultValue = "2048", readonly = true, required = false)
+    @Parameter(defaultValue = "2048")
     String signKeySize;
 
-    @Parameter(defaultValue = "99999", readonly = true, required = false)
+    @Parameter(defaultValue = "99999")
     String signValidity;
 
     /**
      * Maven project
      */
-    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    @Parameter(defaultValue = "${project}", required = true)
     protected MavenProject mavenProject;
 
 
@@ -154,7 +154,7 @@ public abstract class Web2AppMojo extends AbstractMojo {
     /**
      * Maven session
      */
-    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    @Parameter(defaultValue = "${session}", required = true)
     protected MavenSession mavenSession;
 
     @Component
