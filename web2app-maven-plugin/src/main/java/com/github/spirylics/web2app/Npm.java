@@ -21,7 +21,7 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.PACKAGE;
  * Sign and Package in zip
  */
 @Mojo(name = "package", defaultPhase = PACKAGE, requiresDependencyResolution = ResolutionScope.COMPILE)
-public class Package extends Web2AppMojo {
+public class Npm extends Web2AppMojo {
 
     @Override
     public void e() throws Exception {
