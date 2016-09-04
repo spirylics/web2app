@@ -42,7 +42,7 @@ public class Setup extends Web2AppMojo {
 	void generatNpmPackage(File dest) throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		NpmModel.Package npmPackage = new NpmModel.Package().setName(mavenProject.getName())
-				.setVersion(mavenProject.getVersion())
+				.setVersion("1.0.0")
 				.addDependency("cordova", mavenProject.getProperties().getProperty("version.cordova"))
 				.addConfig("unsafe-perm", true).addScript("prebuild", "npm install");
 		if (getPlatforms().contains("ios")) {
