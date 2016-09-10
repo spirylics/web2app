@@ -7,6 +7,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.environment.EnvironmentUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
@@ -226,7 +227,9 @@ public abstract class Web2AppMojo extends AbstractMojo {
         try {
             DefaultExecutor executor = new DefaultExecutor();
             executor.setWorkingDirectory(dir);
-            int exitValue = executor.execute(cmdLine);
+            Map<String, String> environment = EnvironmentUtils.getProcEnvironment();
+            environment.put("PATH", environment.get("PATH") + ":" + new File(frontendDirectory, "node").getAbsolutePath());
+            int exitValue = executor.execute(cmdLine, environment);
             if (exitValue == 0) {
                 getLog().info(label + ": OK");
             } else {

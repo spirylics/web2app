@@ -42,4 +42,10 @@ public class Web2AppMavenPluginTest {
         getMojo("setup").execute();
     }
 
+    @Test
+    public void testExecCordova() throws Exception {
+        Web2AppMojo web2AppMojo = getMojo("setup");
+        web2AppMojo.execCordova("testCordova", new File(System.getProperty("java.io.tmpdir")), "-v");
+    }
+
 }
