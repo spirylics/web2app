@@ -51,12 +51,14 @@ public class ImagesGenBuilder {
     }
 
     enum Type {
-        REGULAR(""), PORTRAIT("-port"), LANDSCAPE("-land");
+        REGULAR("mipmap", ""), PORTRAIT("drawable", "-port"), LANDSCAPE("drawable", "-land");
 
-        final String androidPrefixDirectory;
+        final String androidFirstPrefix;
+        final String androidSecondPrefix;
 
-        Type(String androidPrefixDirectory) {
-            this.androidPrefixDirectory = androidPrefixDirectory;
+        Type(String androidFirstPrefix, String androidSecondPrefix) {
+            this.androidFirstPrefix = androidFirstPrefix;
+            this.androidSecondPrefix = androidSecondPrefix;
         }
     }
 
@@ -217,14 +219,14 @@ public class ImagesGenBuilder {
 
     Map<String, Size> getAndroidDestinationSizeMap(String resourcePath, String destinationFileName, Type type, Size largestSize) {
         return androidDensityRatioMap.entrySet().stream().collect(Collectors.toMap(
-                e -> String.format("%s/drawable%s-%s/%s", resourcePath, type.androidPrefixDirectory, e.getKey(), destinationFileName),
+                e -> String.format("%s/%s%s-%s/%s", resourcePath, type.androidFirstPrefix, type.androidSecondPrefix, e.getKey(), destinationFileName),
                 e -> largestSize.scale(e.getValue())
         ));
     }
 
     Map<String, Size> getAndroidDestinationSizeMap(String resourcePath, String destinationFileName, Type type, Map<String, Size> densitySizeMap) {
         return densitySizeMap.entrySet().stream().collect(Collectors.toMap(
-                e -> String.format("%s/drawable%s-%s/%s", resourcePath, type.androidPrefixDirectory, e.getKey(), destinationFileName),
+                e -> String.format("%s/%s%s-%s/%s", resourcePath, type.androidFirstPrefix, type.androidSecondPrefix, e.getKey(), destinationFileName),
                 e -> e.getValue()
         ));
     }
